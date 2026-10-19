@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Refined",
+  "version": "1.0.0",
+  "description": "Refine your YouTube feed and watch page.",
+  "minimum_chrome_version": "109",
+  "permissions": [
+    "storage",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_title": "YouTube Refined",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "js": [
+        "src/core/settings.js",
+        "src/core/style.js",
+        "src/core/shorts.js",
+        "src/core/topics.js",
+        "src/core/memberships.js",
+        "src/core/mixes.js",
+        "src/core/feed-filters.js",
+        "src/core/grid.js",
+        "src/core/runtime.js",
+        "src/content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

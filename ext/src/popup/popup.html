@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>YouTube Refined</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="popup">
+      <header class="brand">
+        <img class="brand-icon" src="../../public/icon.png" alt="" />
+        <h1 class="brand-name"><span>YouTube</span><span>Refined</span></h1>
+      </header>
+      <div class="grid-control">
+        <div class="grid-header">
+          <label id="columnsTitle" class="title grid-title" for="gridColumnsEnabled">Video grid columns</label>
+          <span class="switch">
+            <input id="gridColumnsEnabled" type="checkbox" role="switch" checked />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+
+        <div id="gridBody" class="grid-body">
+          <div class="grid-stepper-row">
+            <span class="grid-stepper-label">Columns</span>
+            <div class="stepper">
+              <button id="decrement" class="stepper-btn" type="button" aria-label="Fewer columns">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11h14v2H5z" /></svg>
+              </button>
+              <input
+                id="count"
+                class="stepper-input"
+                type="number"
+                inputmode="numeric"
+                min="1"
+                max="10"
+                value="4"
+                aria-label="Number of columns"
+              />
+              <button id="increment" class="stepper-btn" type="button" aria-label="More columns">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z" /></svg>
+              </button>
+            </div>
+          </div>
+
+          <input
+            id="slider"
+            class="slider"
+            type="range"
+            min="1"
+            max="10"
+            step="1"
+            value="4"
+            aria-label="Number of columns"
+          />
+        </div>
+      </div>
+
+      <p id="note" class="note" role="status" aria-live="polite" hidden></p>
+
+      <details class="section" open>
+        <summary class="section-title">Feed cleanup</summary>
+        <div class="row">
+          <label class="row-label" for="blockShorts">Block Shorts</label>
+          <span class="switch">
+            <input id="blockShorts" type="checkbox" role="switch" aria-describedby="shortsNote" checked />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+
+        <p id="shortsNote" class="hint">Removes Shorts from feeds; Shorts links go home.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideExploreTopics">Hide topic sections</label>
+          <span class="switch">
+            <input id="hideExploreTopics" type="checkbox" role="switch" aria-describedby="topicsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+
+        <p id="topicsNote" class="hint">Removes “Explore more topics” from feeds.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideMemberships">Hide membership sections</label>
+          <span class="switch">
+            <input id="hideMemberships" type="checkbox" role="switch" aria-describedby="membershipsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+
+        <p id="membershipsNote" class="hint">Removes “Get more from memberships” from feeds.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideMixes">Hide Mixes</label>
+          <span class="switch">
+            <input id="hideMixes" type="checkbox" role="switch" aria-describedby="mixesNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+
+        <p id="mixesNote" class="hint">Removes Mix playlists from feeds.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideFilterChips">Hide filter chips</label>
+          <span class="switch">
+            <input id="hideFilterChips" type="checkbox" role="switch" aria-describedby="filterChipsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+
+        <p id="filterChipsNote" class="hint">Removes the topic filter bar (All, Gaming, Music…) from feeds.</p>
+      </details>
+
+      <details class="section">
+        <summary class="section-title">Feed filters</summary>
+
+        <div class="row">
+          <label class="row-label" for="hideLiveStreams">Hide live streams</label>
+          <span class="switch">
+            <input id="hideLiveStreams" type="checkbox" role="switch" aria-describedby="liveStreamsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="liveStreamsNote" class="hint">Removes live videos from feeds.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideStartedVideos">Hide started videos</label>
+          <span class="switch">
+            <input id="hideStartedVideos" type="checkbox" role="switch" aria-describedby="startedVideosNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="startedVideosNote" class="hint">Removes videos with playback progress.</p>
+
+        <div class="row">
+          <label class="row-label" for="hidePlaylists">Hide playlists</label>
+          <span class="switch">
+            <input id="hidePlaylists" type="checkbox" role="switch" aria-describedby="playlistsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="playlistsNote" class="hint">Removes playlist cards from feeds.</p>
+      </details>
+
+      <details class="section">
+        <summary class="section-title">Watch page</summary>
+
+        <div class="row">
+          <label class="row-label" for="hideComments">Hide comments</label>
+          <span class="switch">
+            <input id="hideComments" type="checkbox" role="switch" aria-describedby="commentsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="commentsNote" class="hint">Hides the comments area on watch pages.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideRecommendations">Hide watch-page sidebar</label>
+          <span class="switch">
+            <input id="hideRecommendations" type="checkbox" role="switch" aria-describedby="recommendationsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="recommendationsNote" class="hint">Hides recommendations or live chat beside the player.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideEndScreen">Hide end-screen cards</label>
+          <span class="switch">
+            <input id="hideEndScreen" type="checkbox" role="switch" aria-describedby="endScreenNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="endScreenNote" class="hint">Hides video suggestions at playback end.</p>
+      </details>
+
+      <details class="section">
+        <summary class="section-title">Layout</summary>
+
+        <div class="row">
+          <label class="row-label" for="hideSidebar">Hide navigation sidebar</label>
+          <span class="switch">
+            <input id="hideSidebar" type="checkbox" role="switch" aria-describedby="sidebarNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="sidebarNote" class="hint">Removes the left sidebar (Home, Shorts, Subscriptions…) and reclaims the space.</p>
+      </details>
+
+      <div class="actions">
+        <button id="reset" class="link" type="button">Reset to default</button>
+      </div>
+    </div>
+
+    <!-- Shared limits and defaults; a classic script so one file serves both
+         the popup and the content script. -->
+    <script src="../core/settings.js"></script>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,445 @@
+:root {
+  color-scheme: light dark;
+  --surface: #fff;
+  --surface-subtle: #f5f5f7;
+  --surface-hover: #ededf0;
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --separator: #e5e5e8;
+  --control: #1d1d1f;
+  --control-on: #fff;
+  --focus: #5c5c62;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #1c1c1e;
+    --surface-subtle: #2c2c2e;
+    --surface-hover: #3a3a3c;
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1a6;
+    --separator: #38383a;
+    --control: #f5f5f7;
+    --control-on: #1c1c1e;
+    --focus: #d1d1d6;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 340px;
+  min-width: 340px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: transparent;
+}
+
+body {
+  width: 340px;
+  min-width: 340px;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--text-primary);
+  font: 13px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.popup {
+  /* Avoid viewport-relative sizing here: Chrome action popups size to content,
+     and a 100vh max can collapse to the popup's initial short viewport. */
+  max-height: 600px;
+  overflow-y: auto;
+  border: 1px solid var(--separator);
+  border-radius: 16px;
+  padding: 18px 20px 16px;
+  background: var(--surface);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 22px;
+}
+
+.brand-icon {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  object-fit: contain;
+}
+
+.brand-name {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+.grid-control {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.grid-title {
+  cursor: pointer;
+  user-select: none;
+}
+
+.grid-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  transition: opacity 140ms ease;
+}
+
+.grid-body.disabled {
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.grid-stepper-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.grid-stepper-label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.title {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+}
+
+.section {
+  margin-top: 14px;
+  border-top: 1px solid var(--separator);
+}
+
+.section:first-of-type {
+  margin-top: 8px;
+}
+
+.section-title {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 2px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  list-style: none;
+  cursor: pointer;
+}
+
+.section-title::-webkit-details-marker {
+  display: none;
+}
+
+.section-title::after {
+  width: 7px;
+  height: 7px;
+  margin: 0 3px 3px 12px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  content: "";
+  transform: rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.section[open] > .section-title::after {
+  margin-bottom: -3px;
+  transform: rotate(225deg);
+}
+
+.section-title:focus-visible {
+  border-radius: 5px;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ----------------------------- column control ---------------------------- */
+
+.stepper {
+  display: grid;
+  grid-template-columns: 28px 36px 28px;
+  align-items: center;
+  gap: 4px;
+}
+
+.stepper-btn {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 140ms ease, transform 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stepper-btn svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+.stepper-btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.stepper-btn:active:not(:disabled) {
+  transform: scale(0.94);
+  transition-duration: 70ms;
+}
+
+.stepper-btn:disabled {
+  color: var(--text-secondary);
+  cursor: default;
+  opacity: 0.42;
+}
+
+.stepper-input {
+  width: 36px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 2px;
+  border: 1px solid var(--separator);
+  border-radius: 9px;
+  outline: none;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  -moz-appearance: textfield;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stepper-input:hover {
+  background: var(--surface-subtle);
+}
+
+.stepper-input:focus-visible {
+  border-color: var(--focus);
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.slider {
+  display: block;
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--control);
+  cursor: pointer;
+}
+
+.slider:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
+/* ------------------------------ status text ------------------------------ */
+
+.note {
+  margin: 8px 0 0;
+  padding: 9px 11px;
+  border: 1px solid var(--separator);
+  border-radius: 10px;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* ------------------------------- shorts ---------------------------------- */
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 15px;
+  border-top: 1px solid var(--separator);
+}
+
+.section > .row:first-of-type {
+  margin-top: 0;
+  padding-top: 10px;
+  border-top: 0;
+}
+
+.row-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+}
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  width: 46px;
+  height: 28px;
+  flex: none;
+}
+
+/* The invisible input preserves the native switch semantics and hit target. */
+.switch input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.switch-track {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  transition: background-color 150ms ease;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  transition: transform 170ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 150ms ease;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--control);
+}
+
+.switch input:checked + .switch-track .switch-thumb {
+  transform: translateX(18px);
+  background: var(--control-on);
+}
+
+.switch input:focus-visible + .switch-track {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.hint {
+  margin: 7px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* --------------------------------- footer --------------------------------- */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.link {
+  min-height: 28px;
+  padding: 3px 0 3px 8px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 120ms ease, transform 120ms ease;
+}
+
+.link:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link:active {
+  transform: scale(0.98);
+}
+
+.stepper-btn:focus-visible,
+.link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --separator: currentColor;
+  }
+
+  .stepper-btn,
+  .stepper-input,
+  .note {
+    border: 1px solid var(--text-secondary);
+  }
+}
