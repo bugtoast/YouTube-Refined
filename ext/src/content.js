@@ -1,7 +1,4 @@
-/**
- * The only file that talks to extension APIs. Everything else works against
- * a plain page, which keeps the interesting logic in the core modules.
- */
+/** Bridge to extension APIs. All chrome.* calls live here; core modules stay chrome-free. */
 (function () {
   const YTC = window.YTC;
 
@@ -24,7 +21,6 @@
   const HIDE_COUNTRY_CODE_KEY = 'hideCountryCode';
   const SHOW_NAVBAR_SETTINGS_KEY = 'showNavbarSettings';
   const GRID_COLUMNS_ENABLED_KEY = 'gridColumnsEnabled';
-  /** Reported by the page so the popup can explain a clamped layout. */
   const HINT_KEY = 'gridHint';
 
   let lastHint = '';
@@ -36,10 +32,6 @@
     chrome.storage.local.set({ [HINT_KEY]: hint }).catch(() => {});
   }
 
-  // The grid applies immediately on the default so the first paint is already
-  // laid out. Blocking is deliberately left unset: storage resolves in a few
-  // milliseconds, and assuming "on" in the meantime would redirect a page the
-  // user has switched Shorts off.
   YTC.start({ columns: YTC.DEFAULT_COLUMNS, onColumnsApplied: reportHint });
 
   chrome.storage.sync
@@ -86,8 +78,6 @@
       YTC.setShowNavbarSettings(stored[SHOW_NAVBAR_SETTINGS_KEY]);
     })
     .catch(() => {
-      // Storage unavailable: fall back to the defaults rather than leaving the
-      // page without any blocking at all.
       YTC.setColumns(YTC.DEFAULT_COLUMNS);
       YTC.setGridColumnsEnabled(YTC.DEFAULT_GRID_COLUMNS_ENABLED);
       YTC.setShortsBlock(YTC.DEFAULT_BLOCK_SHORTS);
@@ -114,9 +104,7 @@
     if (STORAGE_KEY in changes) YTC.setColumns(changes[STORAGE_KEY].newValue);
     if (GRID_COLUMNS_ENABLED_KEY in changes) YTC.setGridColumnsEnabled(changes[GRID_COLUMNS_ENABLED_KEY].newValue);
     if (BLOCK_SHORTS_KEY in changes) YTC.setShortsBlock(changes[BLOCK_SHORTS_KEY].newValue);
-    if (HIDE_EXPLORE_TOPICS_KEY in changes) {
-      YTC.setHideExploreTopics(changes[HIDE_EXPLORE_TOPICS_KEY].newValue);
-    }
+    if (HIDE_EXPLORE_TOPICS_KEY in changes) YTC.setHideExploreTopics(changes[HIDE_EXPLORE_TOPICS_KEY].newValue);
     if (HIDE_MEMBERSHIPS_KEY in changes) YTC.setHideMemberships(changes[HIDE_MEMBERSHIPS_KEY].newValue);
     if (HIDE_MIXES_KEY in changes) YTC.setHideMixes(changes[HIDE_MIXES_KEY].newValue);
     if (HIDE_LIVE_STREAMS_KEY in changes) YTC.setHideLiveStreams(changes[HIDE_LIVE_STREAMS_KEY].newValue);

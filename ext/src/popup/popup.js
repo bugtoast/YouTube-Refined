@@ -1,15 +1,8 @@
-/**
- * Popup: writes the column preference to storage. YouTube tabs pick the change
- * up through chrome.storage.onChanged, so it lands without a reload.
- *
- * Limits and defaults come from core/settings.js (loaded as a classic script
- * in popup.html) so the popup can never drift from the content script.
- */
+/** Popup: reads/writes preferences to chrome.storage.sync. Changes apply instantly to open tabs. */
 
 const YTC = globalThis.YTC;
 
 const STORAGE_KEY = 'columns';
-/** Written by the page as "wanted:shown"; empty when nothing is clamped. */
 const HINT_KEY = 'gridHint';
 
 const TOGGLE_OPTIONS = [
@@ -46,26 +39,20 @@ const shortsNote = document.getElementById('shortsNote');
 const SHORTS_ON_HINT = 'Removes Shorts from feeds; Shorts links go home.';
 const SHORTS_OFF_HINT = 'Shorts are left alone — reload a YouTube tab to see them again.';
 
-/** Persist immediately, but coalesce bursts from the slider drag. */
 const WRITE_DELAY = 120;
 let writeTimer = 0;
 let writeItems = {};
 
-/** Queues one or more settings to be stored. */
 function queueWrite(items) {
   writeItems = { ...writeItems, ...items };
   clearTimeout(writeTimer);
   writeTimer = setTimeout(() => {
     const pending = writeItems;
     writeItems = {};
-    chrome.storage.sync.set(pending).catch(() => {
-      /* Offline or over quota: the page keeps the value it already has. */
-    });
+    chrome.storage.sync.set(pending).catch(() => {});
   }, WRITE_DELAY);
 }
 
-/* -------------------------------------------------------------------------- */
-/* rendering                                                                   */
 /* -------------------------------------------------------------------------- */
 
 function renderNote(hint) {
@@ -113,8 +100,6 @@ function render(value, hint, toggles) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* storage                                                                     */
-/* -------------------------------------------------------------------------- */
 
 const write = (items) => queueWrite(items);
 
@@ -143,24 +128,21 @@ async function init() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* events                                                                      */
-/* -------------------------------------------------------------------------- */
 
 function commit(raw) {
   const columns = YTC.sanitizeColumns(raw);
-  // A deliberate change clears any stale clamp notice.
   render(columns, '', currentToggleValues());
   write({ [STORAGE_KEY]: columns });
 }
 
 countInput.addEventListener('input', () => {
   const value = countInput.valueAsNumber;
-  if (Number.isNaN(value)) return; // mid-typing (e.g. an emptied field): wait
+  if (Number.isNaN(value)) return;
   commit(value);
 });
 
 countInput.addEventListener('blur', () => {
-  commit(countInput.valueAsNumber); // empty or invalid falls back to the default
+  commit(countInput.valueAsNumber);
 });
 
 slider.addEventListener('input', () => commit(slider.valueAsNumber));

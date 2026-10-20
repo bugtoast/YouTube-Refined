@@ -1,15 +1,8 @@
-/**
- * Wiring: navigation guards, the mutation sweep and resize handling.
- *
- * Everything here is chrome-free on purpose — content.js is the only file
- * that talks to extension APIs, which keeps this layer testable in a plain
- * page and keeps the two concerns separated.
- */
+/** Core runtime: navigation guards, mutation sweep, resize handling and public API. */
 (function (global) {
   const YTC = (global.YTC = global.YTC || {});
 
   const HOME_URL = 'https://www.youtube.com/';
-  /** Grid arrival retries, in ms after start. YouTube boots Polymer lazily. */
   const GRID_PROBES = [250, 750, 1500, 3000];
 
   let columns = YTC.DEFAULT_COLUMNS;
@@ -42,18 +35,12 @@
 
   /* ----------------------------------------------------------------- utils */
 
-  // Duck-typed so it works for nodes from the page's own realm and shadow DOM.
   const isElement = (node) => Boolean(node) && node.nodeType === 1;
 
-  /**
-   * Injects one of the stylesheets. At document_start the document can still
-   * be missing its root, so this reports whether it managed to attach.
-   */
   function injectStyle(id, css) {
     if (document.getElementById(id)) return true;
     const parent = document.head || document.documentElement;
     if (!parent) return false;
-
     const style = document.createElement('style');
     style.id = id;
     style.textContent = css;
@@ -187,7 +174,7 @@
           });
           window.dispatchEvent(navEvent);
         } catch {
-          // Standard href will handle navigation
+          // Fallback: standard href handles navigation
         }
       });
     }
@@ -238,7 +225,6 @@
     }
   }
 
-  /** Sends the tab home if it is showing Shorts. Returns true if it did. */
   function guardLocation() {
     if (!blockShorts) return false;
     if (!YTC.shorts.isShortsLocation(location)) return false;
@@ -257,11 +243,6 @@
     return isElement(target) && typeof target.closest === 'function' ? target.closest('a[href]') : null;
   }
 
-  /**
-   * Runs before YouTube's own click handlers, so a Shorts link never gets to
-   * start the app router. Modified clicks are left alone: they open a new tab,
-   * which the service worker's redirect rule handles instead.
-   */
   function onClick(event) {
     if (!blockShorts) return;
     if (event.defaultPrevented || event.button !== 0) return;
@@ -296,11 +277,6 @@
     if (grid) resizeObserver.observe(grid);
   }
 
-  /**
-   * Finishes setup once the document has a root element. Content scripts run
-   * at document_start, when <html> may not exist yet, so this is called again
-   * from the first mutation until it succeeds.
-   */
   function bootstrap() {
     if (bootstrapped) return true;
     const root = document.documentElement;
@@ -320,13 +296,7 @@
 
   /* ---------------------------------------------------------------- sweep  */
 
-  /**
-   * Queues one sweep for the next task.
-   *
-   * Deliberately a timer rather than requestAnimationFrame: rAF does not run in
-   * a background tab, so a YouTube tab you are not looking at would leave
-   * Shorts on screen until you switched to it. Timers keep working either way.
-   */
+  /** Uses setTimeout instead of rAF so sweeps run even in background tabs. */
   function scheduleFlush() {
     if (flushScheduled) return;
     flushScheduled = true;
@@ -342,7 +312,6 @@
       if (!isElement(node) || swept.has(node) || !node.isConnected) continue;
       swept.add(node);
 
-      // Leaf nodes cannot contain anything worth removing.
       if (blockShorts && (YTC.shorts.isShortsElement(node) || node.childElementCount > 0)) {
         YTC.shorts.removeShorts(node);
       }
@@ -375,13 +344,6 @@
     if (pending.size) scheduleFlush();
   }
 
-  /**
-   * One observer for the whole page, watching the document itself so it works
-   * before <html> exists. Added nodes are queued and handled once per frame,
-   * so a burst of Polymer renders costs a single sweep.
-   *
-   * Attached only while a feed-cleanup option is enabled.
-   */
   function observeMutations() {
     if (!hasFeedCleanup()) return;
     if (mutationObserver) return;
@@ -407,7 +369,6 @@
 
   /* ------------------------------------------------------------ navigation */
 
-  /** YouTube swaps pages without reloading; re-check everything after one. */
   function onNavigate() {
     observeGrid();
     updateColumns(true);
@@ -427,20 +388,8 @@
 
   /* ----------------------------------------------------------------- api   */
 
-  /**
-   * Turns Shorts blocking on or off in the current tab, without a reload.
-   *
-   * This is also how the stored preference arrives: nothing shorts-related is
-   * set up until this is called, so a page whose preference is "off" is never
-   * redirected or swept during the moment before storage resolves.
-   *
-   * Switching it on re-sweeps the page, so Shorts YouTube has rendered since
-   * the last change are cleared immediately. Shorts that were removed while it
-   * was off reappear only when YouTube re-renders them, as they normally would.
-   */
   YTC.setShortsBlock = function setShortsBlock(enabled) {
     blockShorts = YTC.sanitizeBlockShorts(enabled);
-
     if (blockShorts) {
       injectStyle('ytc-shorts-style', YTC.SHORTS_STYLE_TEXT);
       observeMutations();
@@ -453,10 +402,8 @@
     return blockShorts;
   };
 
-  /** Turns Explore more topics section removal on or off in the current tab. */
   YTC.setHideExploreTopics = function setHideExploreTopics(enabled) {
     hideExploreTopics = YTC.sanitizeHideExploreTopics(enabled);
-
     if (hideExploreTopics) {
       observeMutations();
       YTC.topics.removeExploreMoreTopics(document.body || document.documentElement);
@@ -464,10 +411,8 @@
     return hideExploreTopics;
   };
 
-  /** Turns membership section removal on or off in the current tab. */
   YTC.setHideMemberships = function setHideMemberships(enabled) {
     hideMemberships = YTC.sanitizeHideMemberships(enabled);
-
     if (hideMemberships) {
       observeMutations();
       YTC.memberships.removeMemberships(document.body || document.documentElement);
@@ -475,10 +420,8 @@
     return hideMemberships;
   };
 
-  /** Turns Mix removal on or off in the current tab. */
   YTC.setHideMixes = function setHideMixes(enabled) {
     hideMixes = YTC.sanitizeHideMixes(enabled);
-
     if (hideMixes) {
       observeMutations();
       YTC.mixes.removeMixes(document.body || document.documentElement);
@@ -595,9 +538,6 @@
     window.addEventListener('popstate', guardLocation);
     document.addEventListener('yt-navigate-finish', onNavigate);
     document.addEventListener('yt-page-data-updated', onNavigate);
-    // Retries bootstrap() once the document has a root. The mutation observer
-    // normally gets there first, but it is only attached while Shorts blocking
-    // is on, so this cannot be the only path.
     document.addEventListener('readystatechange', bootstrap);
 
     observeSizes();
@@ -612,7 +552,6 @@
     }
   };
 
-  /** Applies a new column count immediately. */
   YTC.setColumns = function setColumns(value) {
     columns = YTC.sanitizeColumns(value);
     return bootstrapped && gridColumnsEnabled ? updateColumns(true) : null;
