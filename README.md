@@ -8,8 +8,7 @@ No trackers, no heavy frameworks, and zero tab reloads required.
 
 ## Preview
 
-<p align="center">
-  <!-- Place your extension screenshot at screenshots/preview.png -->
+<p align="left">
   <img src="screenshots/preview.png" alt="YouTube Refined popup preview" width="360" />
 </p>
 
@@ -25,27 +24,27 @@ YouTube Refined gives you control over the layout. If you want 6 or 8 video colu
 
 ## Features
 
-### 🎛️ Video Grid Columns
+### Video Grid Columns
 - **Custom Column Count:** Choose anywhere between **1 to 10 columns per row** using the stepper buttons, range slider, or direct number input.
 - **Master Feature Toggle:** Flip custom columns on or off anytime. When switched off, YouTube reverts to its native responsive grid without losing your saved column setting.
 - **Smart Responsive Clamping:** If your window or split-screen is too narrow to comfortably fit your requested column count, the grid automatically adapts so thumbnails never collapse, displaying an informational note in the popup.
 
-### 🧹 Left Sidebar & Navigation
+### Left Sidebar & Navigation
 - **Hide Navigation Sidebar:** Completely removes the left mini-guide (Home, Shorts, Subscriptions, You), the slide-out navigation drawer, and the top-left hamburger menu. Reclaims that horizontal space so feeds span edge-to-edge across your monitor.
 
-### 🚫 Feed Decluttering
+### Feed Decluttering
 - **Block Shorts:** Removes Shorts shelves, chips, and grid cards from your feed. Any Shorts links you click (or open via bookmarks) are automatically redirected straight to the homepage.
 - **Hide Topic Sections:** Cleans out "Explore more topics" shelves.
 - **Hide Membership Sections:** Removes "Get more from memberships" promotion blocks.
 - **Hide Mixes:** Filters out auto-generated YouTube Mix playlists.
 - **Hide Filter Chips:** Removes the top topic pill bar (*All, Gaming, Music...*) and reclaims header space while keeping search filters intact.
 
-### 🔍 Feed Filters
+### Feed Filters
 - **Hide Live Streams:** Strips live broadcasts and upcoming stream cards from feeds.
 - **Hide Started Videos:** Automatically hides videos you've already started watching (with red progress bars) to keep feeds fresh.
 - **Hide Playlists:** Removes playlist cards so your feeds focus purely on individual videos.
 
-### 🎬 Watch Page
+### Watch Page
 - **Hide Comments:** Removes the comments area on video watch pages.
 - **Hide Recommendations:** Hides the right-hand recommendation column / live chat beside the player, expanding the player for a distraction-free watch experience.
 - **Hide End-Screen Cards:** Removes video suggestion tiles that pop up over the player near the end of a video.
