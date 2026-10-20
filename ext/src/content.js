@@ -18,6 +18,11 @@
   const HIDE_END_SCREEN_KEY = 'hideEndScreen';
   const HIDE_FILTER_CHIPS_KEY = 'hideFilterChips';
   const HIDE_SIDEBAR_KEY = 'hideSidebar';
+  const HIDE_VOICE_SEARCH_KEY = 'hideVoiceSearch';
+  const HIDE_CREATE_BUTTON_KEY = 'hideCreateButton';
+  const HIDE_NOTIFICATIONS_KEY = 'hideNotifications';
+  const HIDE_COUNTRY_CODE_KEY = 'hideCountryCode';
+  const SHOW_NAVBAR_SETTINGS_KEY = 'showNavbarSettings';
   const GRID_COLUMNS_ENABLED_KEY = 'gridColumnsEnabled';
   /** Reported by the page so the popup can explain a clamped layout. */
   const HINT_KEY = 'gridHint';
@@ -52,6 +57,11 @@
       [HIDE_END_SCREEN_KEY]: YTC.DEFAULT_HIDE_END_SCREEN,
       [HIDE_FILTER_CHIPS_KEY]: YTC.DEFAULT_HIDE_FILTER_CHIPS,
       [HIDE_SIDEBAR_KEY]: YTC.DEFAULT_HIDE_SIDEBAR,
+      [HIDE_VOICE_SEARCH_KEY]: YTC.DEFAULT_HIDE_VOICE_SEARCH,
+      [HIDE_CREATE_BUTTON_KEY]: YTC.DEFAULT_HIDE_CREATE_BUTTON,
+      [HIDE_NOTIFICATIONS_KEY]: YTC.DEFAULT_HIDE_NOTIFICATIONS,
+      [HIDE_COUNTRY_CODE_KEY]: YTC.DEFAULT_HIDE_COUNTRY_CODE,
+      [SHOW_NAVBAR_SETTINGS_KEY]: YTC.DEFAULT_SHOW_NAVBAR_SETTINGS,
       [GRID_COLUMNS_ENABLED_KEY]: YTC.DEFAULT_GRID_COLUMNS_ENABLED,
     })
     .then((stored) => {
@@ -69,6 +79,11 @@
       YTC.setHideEndScreen(stored[HIDE_END_SCREEN_KEY]);
       YTC.setHideFilterChips(stored[HIDE_FILTER_CHIPS_KEY]);
       YTC.setHideSidebar(stored[HIDE_SIDEBAR_KEY]);
+      YTC.setHideVoiceSearch(stored[HIDE_VOICE_SEARCH_KEY]);
+      YTC.setHideCreateButton(stored[HIDE_CREATE_BUTTON_KEY]);
+      YTC.setHideNotifications(stored[HIDE_NOTIFICATIONS_KEY]);
+      YTC.setHideCountryCode(stored[HIDE_COUNTRY_CODE_KEY]);
+      YTC.setShowNavbarSettings(stored[SHOW_NAVBAR_SETTINGS_KEY]);
     })
     .catch(() => {
       // Storage unavailable: fall back to the defaults rather than leaving the
@@ -87,6 +102,11 @@
       YTC.setHideEndScreen(YTC.DEFAULT_HIDE_END_SCREEN);
       YTC.setHideFilterChips(YTC.DEFAULT_HIDE_FILTER_CHIPS);
       YTC.setHideSidebar(YTC.DEFAULT_HIDE_SIDEBAR);
+      YTC.setHideVoiceSearch(YTC.DEFAULT_HIDE_VOICE_SEARCH);
+      YTC.setHideCreateButton(YTC.DEFAULT_HIDE_CREATE_BUTTON);
+      YTC.setHideNotifications(YTC.DEFAULT_HIDE_NOTIFICATIONS);
+      YTC.setHideCountryCode(YTC.DEFAULT_HIDE_COUNTRY_CODE);
+      YTC.setShowNavbarSettings(YTC.DEFAULT_SHOW_NAVBAR_SETTINGS);
     });
 
   chrome.storage.onChanged.addListener((changes, area) => {
@@ -107,5 +127,10 @@
     if (HIDE_END_SCREEN_KEY in changes) YTC.setHideEndScreen(changes[HIDE_END_SCREEN_KEY].newValue);
     if (HIDE_FILTER_CHIPS_KEY in changes) YTC.setHideFilterChips(changes[HIDE_FILTER_CHIPS_KEY].newValue);
     if (HIDE_SIDEBAR_KEY in changes) YTC.setHideSidebar(changes[HIDE_SIDEBAR_KEY].newValue);
+    if (HIDE_VOICE_SEARCH_KEY in changes) YTC.setHideVoiceSearch(changes[HIDE_VOICE_SEARCH_KEY].newValue);
+    if (HIDE_CREATE_BUTTON_KEY in changes) YTC.setHideCreateButton(changes[HIDE_CREATE_BUTTON_KEY].newValue);
+    if (HIDE_NOTIFICATIONS_KEY in changes) YTC.setHideNotifications(changes[HIDE_NOTIFICATIONS_KEY].newValue);
+    if (HIDE_COUNTRY_CODE_KEY in changes) YTC.setHideCountryCode(changes[HIDE_COUNTRY_CODE_KEY].newValue);
+    if (SHOW_NAVBAR_SETTINGS_KEY in changes) YTC.setShowNavbarSettings(changes[SHOW_NAVBAR_SETTINGS_KEY].newValue);
   });
 })();

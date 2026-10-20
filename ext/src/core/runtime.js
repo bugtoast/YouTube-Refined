@@ -25,6 +25,11 @@
   let hideEndScreen = YTC.DEFAULT_HIDE_END_SCREEN;
   let hideFilterChips = YTC.DEFAULT_HIDE_FILTER_CHIPS;
   let hideSidebar = YTC.DEFAULT_HIDE_SIDEBAR;
+  let hideVoiceSearch = YTC.DEFAULT_HIDE_VOICE_SEARCH;
+  let hideCreateButton = YTC.DEFAULT_HIDE_CREATE_BUTTON;
+  let hideNotifications = YTC.DEFAULT_HIDE_NOTIFICATIONS;
+  let hideCountryCode = YTC.DEFAULT_HIDE_COUNTRY_CODE;
+  let showNavbarSettings = YTC.DEFAULT_SHOW_NAVBAR_SETTINGS;
   let gridColumnsEnabled = YTC.DEFAULT_GRID_COLUMNS_ENABLED;
   let onColumnsApplied = null;
   let lastWidth = -1;
@@ -74,11 +79,153 @@
       ['ytc-hide-end-screen', hideEndScreen, YTC.WATCH_PAGE_STYLES.hideEndScreen],
       ['ytc-hide-filter-chips', hideFilterChips, YTC.WATCH_PAGE_STYLES.hideFilterChips],
       ['ytc-hide-sidebar', hideSidebar, YTC.WATCH_PAGE_STYLES.hideSidebar],
+      ['ytc-hide-voice-search', hideVoiceSearch, YTC.NAVBAR_STYLES.hideVoiceSearch],
+      ['ytc-hide-create-button', hideCreateButton, YTC.NAVBAR_STYLES.hideCreateButton],
+      ['ytc-hide-notifications', hideNotifications, YTC.NAVBAR_STYLES.hideNotifications],
+      ['ytc-hide-country-code', hideCountryCode, YTC.NAVBAR_STYLES.hideCountryCode],
     ];
     for (const [id, enabled, css] of styles) {
       if (enabled) injectStyle(id, css);
       else removeStyle(id);
     }
+  }
+
+  /* -------------------------------------------------------- navbar settings */
+
+  const NAVBAR_BUTTON_ID = 'ytc-navbar-settings';
+  let navbarObserver = null;
+
+  function syncButtonTheme(btn) {
+    if (!btn) return;
+    const masthead = document.querySelector('ytd-masthead');
+    const mastheadBg = masthead ? window.getComputedStyle(masthead).backgroundColor : '';
+    const isDark =
+      document.documentElement.hasAttribute('dark') ||
+      document.documentElement.getAttribute('dark') === 'true' ||
+      document.querySelector('ytd-app[dark], ytd-masthead[dark]') !== null ||
+      (mastheadBg && mastheadBg !== 'rgb(255, 255, 255)' && mastheadBg !== 'rgba(0, 0, 0, 0)') ||
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    btn.style.setProperty('color', isDark ? '#f1f1f1' : '#0f0f0f', 'important');
+  }
+
+  function getProfileContainer(container) {
+    const avatarTarget = container.querySelector(
+      '#avatar-btn, yt-avatar-button, yt-img-shadow#avatar, ytd-topbar-menu-button-renderer:has(#avatar-btn, #avatar, img)'
+    );
+    if (avatarTarget) {
+      let node = avatarTarget;
+      while (node && node.parentElement !== container) {
+        node = node.parentElement;
+      }
+      if (node && node.parentElement === container) {
+        return node;
+      }
+    }
+
+    const directChildren = Array.from(container.children).filter(
+      (el) => el.id !== NAVBAR_BUTTON_ID && el.localName !== 'style'
+    );
+    if (directChildren.length > 0) {
+      return directChildren[directChildren.length - 1];
+    }
+    return null;
+  }
+
+  function syncNavbarSettingsButton() {
+    let existing = document.getElementById(NAVBAR_BUTTON_ID);
+    if (!showNavbarSettings) {
+      existing?.remove();
+      navbarObserver?.disconnect();
+      navbarObserver = null;
+      removeStyle('ytc-navbar-btn-style');
+      return false;
+    }
+
+    injectStyle('ytc-navbar-btn-style', YTC.NAVBAR_BUTTON_STYLE);
+
+    const container =
+      document.querySelector('ytd-masthead #end #buttons') ||
+      document.querySelector('ytd-masthead #end') ||
+      document.querySelector('ytd-masthead #container #end');
+    if (!container) {
+      if (!navbarObserver) {
+        navbarObserver = new MutationObserver(() => {
+          if (syncNavbarSettingsButton()) {
+            navbarObserver?.disconnect();
+            navbarObserver = null;
+          }
+        });
+        const target = document.querySelector('ytd-masthead') || document.body || document.documentElement;
+        if (target) navbarObserver.observe(target, { childList: true, subtree: true });
+      }
+      return false;
+    }
+
+    if (existing && existing.localName !== 'a') {
+      existing.remove();
+      existing = null;
+    }
+
+    const btn = existing || document.createElement('a');
+    if (!existing) {
+      btn.id = NAVBAR_BUTTON_ID;
+      btn.href = '/account';
+      btn.className = 'yt-simple-endpoint';
+      btn.setAttribute('role', 'button');
+      btn.setAttribute('aria-label', 'Settings');
+      btn.title = 'Settings';
+      btn.innerHTML =
+        '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.44.17-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>';
+      btn.addEventListener('click', (e) => {
+        if (e.defaultPrevented || e.button !== 0) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        try {
+          const navEvent = new CustomEvent('yt-navigate', {
+            bubbles: true,
+            composed: true,
+            detail: { endpoint: { commandMetadata: { webCommandMetadata: { url: '/account' } } } },
+          });
+          window.dispatchEvent(navEvent);
+        } catch {
+          // Standard href will handle navigation
+        }
+      });
+    }
+
+    syncButtonTheme(btn);
+
+    const profileTarget = getProfileContainer(container);
+    if (profileTarget && profileTarget.parentElement === container) {
+      if (btn.previousElementSibling !== profileTarget || btn.parentElement !== container) {
+        container.insertBefore(btn, profileTarget.nextSibling);
+      }
+    } else if (btn.parentElement !== container) {
+      container.appendChild(btn);
+    }
+
+    if (!navbarObserver) {
+      navbarObserver = new MutationObserver(() => {
+        if (!showNavbarSettings) return;
+        const currentContainer =
+          document.querySelector('ytd-masthead #end #buttons') ||
+          document.querySelector('ytd-masthead #end');
+        if (!currentContainer) return;
+        const currentBtn = document.getElementById(NAVBAR_BUTTON_ID);
+        if (!currentBtn) {
+          syncNavbarSettingsButton();
+          return;
+        }
+        const profile = getProfileContainer(currentContainer);
+        if (profile && currentBtn.previousElementSibling !== profile) {
+          currentContainer.insertBefore(currentBtn, profile.nextSibling);
+        }
+        syncButtonTheme(currentBtn);
+      });
+      const obsTarget = document.querySelector('ytd-masthead') || document.documentElement;
+      if (obsTarget) navbarObserver.observe(obsTarget, { childList: true, subtree: true });
+    }
+
+    return true;
   }
 
   /* ------------------------------------------------------------ navigation */
@@ -164,6 +311,7 @@
       injectStyle('ytc-style', YTC.GRID_STYLE_TEXT);
     }
     syncWatchPageStyles();
+    syncNavbarSettingsButton();
     resizeObserver.observe(root);
     observeGrid();
     updateColumns(true);
@@ -274,6 +422,7 @@
     if (hideStartedVideos) YTC.feedFilters.removeStartedVideos(document.body || document.documentElement);
     if (hidePlaylists) YTC.feedFilters.removePlaylists(document.body || document.documentElement);
     syncWatchPageStyles();
+    syncNavbarSettingsButton();
   }
 
   /* ----------------------------------------------------------------- api   */
@@ -392,6 +541,36 @@
     hideSidebar = YTC.sanitizeHideSidebar(enabled);
     syncWatchPageStyles();
     return hideSidebar;
+  };
+
+  YTC.setHideVoiceSearch = function setHideVoiceSearch(enabled) {
+    hideVoiceSearch = YTC.sanitizeHideVoiceSearch(enabled);
+    syncWatchPageStyles();
+    return hideVoiceSearch;
+  };
+
+  YTC.setHideCreateButton = function setHideCreateButton(enabled) {
+    hideCreateButton = YTC.sanitizeHideCreateButton(enabled);
+    syncWatchPageStyles();
+    return hideCreateButton;
+  };
+
+  YTC.setHideNotifications = function setHideNotifications(enabled) {
+    hideNotifications = YTC.sanitizeHideNotifications(enabled);
+    syncWatchPageStyles();
+    return hideNotifications;
+  };
+
+  YTC.setHideCountryCode = function setHideCountryCode(enabled) {
+    hideCountryCode = YTC.sanitizeHideCountryCode(enabled);
+    syncWatchPageStyles();
+    return hideCountryCode;
+  };
+
+  YTC.setShowNavbarSettings = function setShowNavbarSettings(enabled) {
+    showNavbarSettings = YTC.sanitizeShowNavbarSettings(enabled);
+    syncNavbarSettingsButton();
+    return showNavbarSettings;
   };
 
   YTC.setGridColumnsEnabled = function setGridColumnsEnabled(enabled) {

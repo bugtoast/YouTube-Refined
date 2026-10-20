@@ -174,16 +174,65 @@
       </details>
 
       <details class="section">
+        <summary class="section-title">Navigation bar</summary>
+
+        <div class="row">
+          <label class="row-label" for="showNavbarSettings">Settings button in navbar</label>
+          <span class="switch">
+            <input id="showNavbarSettings" type="checkbox" role="switch" aria-describedby="navbarSettingsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="navbarSettingsNote" class="hint">Adds a gear icon to the top navbar (right of your profile) to quickly open YouTube settings.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideCreateButton">Hide Create button</label>
+          <span class="switch">
+            <input id="hideCreateButton" type="checkbox" role="switch" aria-describedby="createButtonNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="createButtonNote" class="hint">Removes the “+ Create” button from the top navbar.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideVoiceSearch">Hide voice search</label>
+          <span class="switch">
+            <input id="hideVoiceSearch" type="checkbox" role="switch" aria-describedby="voiceSearchNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="voiceSearchNote" class="hint">Removes the microphone button next to the search bar.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideNotifications">Hide notifications</label>
+          <span class="switch">
+            <input id="hideNotifications" type="checkbox" role="switch" aria-describedby="notificationsNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="notificationsNote" class="hint">Removes the notification bell icon from the top navbar.</p>
+
+        <div class="row">
+          <label class="row-label" for="hideCountryCode">Hide country code</label>
+          <span class="switch">
+            <input id="hideCountryCode" type="checkbox" role="switch" aria-describedby="countryCodeNote" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </div>
+        <p id="countryCodeNote" class="hint">Removes the country code badge next to the YouTube logo.</p>
+      </details>
+
+      <details class="section">
         <summary class="section-title">Layout</summary>
 
         <div class="row">
-          <label class="row-label" for="hideSidebar">Hide navigation sidebar</label>
+          <label class="row-label" for="hideSidebar">Hide mini-sidebar</label>
           <span class="switch">
             <input id="hideSidebar" type="checkbox" role="switch" aria-describedby="sidebarNote" />
             <span class="switch-track"><span class="switch-thumb"></span></span>
           </span>
         </div>
-        <p id="sidebarNote" class="hint">Removes the left sidebar (Home, Shorts, Subscriptions…) and reclaims the space.</p>
+        <p id="sidebarNote" class="hint">Removes the collapsed sidebar (Home, Shorts, Subscriptions…); the menu button still opens the full sidebar.</p>
       </details>
 
       <div class="actions">

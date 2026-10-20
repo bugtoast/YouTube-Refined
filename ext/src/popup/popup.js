@@ -25,6 +25,11 @@ const TOGGLE_OPTIONS = [
   { key: 'hideRecommendations', id: 'hideRecommendations', initial: YTC.DEFAULT_HIDE_RECOMMENDATIONS, sanitize: YTC.sanitizeHideRecommendations },
   { key: 'hideEndScreen', id: 'hideEndScreen', initial: YTC.DEFAULT_HIDE_END_SCREEN, sanitize: YTC.sanitizeHideEndScreen },
   { key: 'hideSidebar', id: 'hideSidebar', initial: YTC.DEFAULT_HIDE_SIDEBAR, sanitize: YTC.sanitizeHideSidebar },
+  { key: 'showNavbarSettings', id: 'showNavbarSettings', initial: YTC.DEFAULT_SHOW_NAVBAR_SETTINGS, sanitize: YTC.sanitizeShowNavbarSettings },
+  { key: 'hideCreateButton', id: 'hideCreateButton', initial: YTC.DEFAULT_HIDE_CREATE_BUTTON, sanitize: YTC.sanitizeHideCreateButton },
+  { key: 'hideVoiceSearch', id: 'hideVoiceSearch', initial: YTC.DEFAULT_HIDE_VOICE_SEARCH, sanitize: YTC.sanitizeHideVoiceSearch },
+  { key: 'hideNotifications', id: 'hideNotifications', initial: YTC.DEFAULT_HIDE_NOTIFICATIONS, sanitize: YTC.sanitizeHideNotifications },
+  { key: 'hideCountryCode', id: 'hideCountryCode', initial: YTC.DEFAULT_HIDE_COUNTRY_CODE, sanitize: YTC.sanitizeHideCountryCode },
   { key: 'gridColumnsEnabled', id: 'gridColumnsEnabled', initial: YTC.DEFAULT_GRID_COLUMNS_ENABLED, sanitize: YTC.sanitizeGridColumnsEnabled },
 ];
 

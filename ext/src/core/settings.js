@@ -59,6 +59,22 @@
   YTC.DEFAULT_GRID_COLUMNS_ENABLED = true;
   YTC.sanitizeGridColumnsEnabled = (value) => value !== false;
 
+  /** Navbar customizations. */
+  YTC.DEFAULT_HIDE_VOICE_SEARCH = false;
+  YTC.sanitizeHideVoiceSearch = (value) => value === true;
+
+  YTC.DEFAULT_HIDE_CREATE_BUTTON = false;
+  YTC.sanitizeHideCreateButton = (value) => value === true;
+
+  YTC.DEFAULT_HIDE_NOTIFICATIONS = false;
+  YTC.sanitizeHideNotifications = (value) => value === true;
+
+  YTC.DEFAULT_HIDE_COUNTRY_CODE = false;
+  YTC.sanitizeHideCountryCode = (value) => value === true;
+
+  YTC.DEFAULT_SHOW_NAVBAR_SETTINGS = false;
+  YTC.sanitizeShowNavbarSettings = (value) => value === true;
+
   /** Below this card width thumbnails stop being recognisable, so we clamp. */
   YTC.MIN_CARD_WIDTH = 150;
 

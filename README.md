@@ -1,6 +1,6 @@
 # YouTube Refined
 
-A lightweight, distraction-free Chrome extension built to clean up YouTube's cluttered UI. Pick your exact video grid layout, ditch Shorts, hide unwanted shelves, remove sidebars, and browse YouTube without algorithmic noise.
+A lightweight, distraction-free Chrome extension built to clean up YouTube's cluttered UI. Pick your exact video grid layout, ditch Shorts, customize the top navigation bar, hide unwanted shelves, remove sidebars, and browse YouTube without algorithmic noise.
 
 No trackers, no heavy frameworks, and zero tab reloads required.
 
@@ -29,8 +29,15 @@ YouTube Refined gives you control over the layout. If you want 6 or 8 video colu
 - **Master Feature Toggle:** Flip custom columns on or off anytime. When switched off, YouTube reverts to its native responsive grid without losing your saved column setting.
 - **Smart Responsive Clamping:** If your window or split-screen is too narrow to comfortably fit your requested column count, the grid automatically adapts so thumbnails never collapse, displaying an informational note in the popup.
 
+### Navigation Bar Customization
+- **In-Navbar Settings Shortcut:** Adds a gear button directly to YouTube's top header (to the right of your profile avatar) for instant one-click access to YouTube settings without digging through the account menu.
+- **Hide Create Button:** Removes the “+ Create” button from the top navigation bar.
+- **Hide Voice Search:** Removes the microphone button next to the search input.
+- **Hide Notifications:** Cleans up the notification bell icon from the top bar.
+- **Hide Country Code:** Removes the regional country badge (e.g. `US`, `IN`) next to the YouTube logo.
+
 ### Left Sidebar & Navigation
-- **Hide Navigation Sidebar:** Completely removes the left mini-guide (Home, Shorts, Subscriptions, You), the slide-out navigation drawer, and the top-left hamburger menu. Reclaims that horizontal space so feeds span edge-to-edge across your monitor.
+- **Hide Mini-Sidebar:** Removes the collapsed left navigation strip (Home, Shorts, Subscriptions, You) and reclaims screen space so feeds span edge-to-edge, while keeping the top-left hamburger menu fully functional to open the sidebar drawer whenever you need it.
 
 ### Feed Decluttering
 - **Block Shorts:** Removes Shorts shelves, chips, and grid cards from your feed. Any Shorts links you click (or open via bookmarks) are automatically redirected straight to the homepage.
@@ -101,7 +108,7 @@ To build a fresh distribution folder and release `.zip`:
 bash tools/build.sh
 ```
 
-This creates a clean unpacked build in `dist/youtube-refined` and an archive in `dist/youtube-refined-1.0.0.zip`.
+This creates a clean unpacked build in `dist/youtube-refined` and an archive in `dist/youtube-refined-1.2.0.zip`.
 
 ---
 

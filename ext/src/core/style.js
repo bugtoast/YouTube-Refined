@@ -93,30 +93,95 @@ ytd-reel-video-renderer {
       '#frosted-glass.loading-with-chipbar',
     ].join(', ') + ' { height: var(--ytd-toolbar-height, 56px) !important; }',
     hideSidebar: [
-      ':root, ytd-app { --ytd-mini-guide-width: 0px !important; --app-drawer-width: 0px !important; --ytd-guide-width: 0px !important; }',
+      ':root, ytd-app { --ytd-mini-guide-width: 0px !important; }',
+      'ytd-mini-guide-renderer { display: none !important; }',
       [
-        'ytd-mini-guide-renderer',
-        'ytd-app #guide',
-        'ytd-app #guide-wrapper',
-        'ytd-guide-renderer',
-        'tp-yt-app-drawer#guide',
-        'app-drawer#guide',
-        '#guide-button',
-        'ytd-masthead #guide-button',
-      ].join(', ') + ' { display: none !important; }',
-      [
-        'ytd-app[guide-persistent-and-visible] ytd-page-manager.ytd-app',
         'ytd-app[mini-guide-visible] ytd-page-manager.ytd-app',
-        'ytd-app[guide-persistent-and-visible] #page-manager',
         'ytd-app[mini-guide-visible] #page-manager',
-        'ytd-app[guide-persistent-and-visible] ytd-two-column-browse-results-renderer.ytd-browse',
         'ytd-app[mini-guide-visible] ytd-two-column-browse-results-renderer.ytd-browse',
-        '#page-manager.ytd-app',
-        'ytd-page-manager.ytd-app',
-        '#content.ytd-app',
-      ].join(', ') + ' { margin-left: 0 !important; padding-left: 0 !important; }',
+      ].join(', ') + ' { margin-left: 0 !important; }',
     ].join(' '),
   };
+
+  YTC.NAVBAR_STYLES = {
+    hideVoiceSearch: 'ytd-masthead #voice-search-button { display: none !important; }',
+    hideCreateButton: [
+      'ytd-masthead #buttons > ytd-button-renderer:has(button[aria-label*="Create"])',
+      'ytd-masthead #buttons > yt-button-view-model:has(button[aria-label*="Create"])',
+      'ytd-masthead #buttons > yt-button-shape:has(button[aria-label*="Create"])',
+      'ytd-masthead #buttons > ytd-button-renderer:has(a[href*="/upload"])',
+      'ytd-masthead #buttons > yt-button-view-model:has(a[href*="/upload"])',
+      'ytd-masthead #buttons > ytd-topbar-menu-button-renderer:has(button[aria-label*="Create"])',
+      'ytd-masthead ytd-creator-button-renderer',
+      'ytd-masthead #create-icon',
+    ].join(', ') + ' { display: none !important; }',
+    hideNotifications: [
+      'ytd-masthead #notifications',
+      'ytd-masthead ytd-notification-topbar-button-renderer',
+      'ytd-masthead #buttons > ytd-notification-topbar-button-renderer',
+    ].join(', ') + ' { display: none !important; }',
+    hideCountryCode: 'ytd-masthead #country-code { display: none !important; }',
+  };
+
+  YTC.NAVBAR_BUTTON_STYLE = `
+#ytc-navbar-settings {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  margin: 0 4px;
+  background: transparent;
+  color: #0f0f0f;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 150ms ease, transform 120ms ease;
+  vertical-align: middle;
+  flex: none;
+  box-sizing: border-box;
+  text-decoration: none;
+  outline: none;
+}
+
+html[dark] #ytc-navbar-settings,
+html[dark="true"] #ytc-navbar-settings,
+[dark] #ytc-navbar-settings,
+ytd-app[dark] #ytc-navbar-settings,
+ytd-masthead[dark] #ytc-navbar-settings {
+  color: #f1f1f1 !important;
+}
+
+html:not([dark]) #ytc-navbar-settings {
+  color: #0f0f0f;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([dark="false"]) #ytc-navbar-settings {
+    color: #f1f1f1 !important;
+  }
+}
+
+#ytc-navbar-settings:hover {
+  background-color: var(--yt-spec-badge-chip-background, rgba(128, 128, 128, 0.2));
+}
+
+#ytc-navbar-settings:active {
+  transform: scale(0.92);
+}
+
+#ytc-navbar-settings svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor !important;
+  display: block;
+  pointer-events: none;
+}
+`.trim();
 
   /** Kept for callers that want both in one go. */
   YTC.STYLE_TEXT = `${YTC.GRID_STYLE_TEXT}\n\n${YTC.SHORTS_STYLE_TEXT}`;
